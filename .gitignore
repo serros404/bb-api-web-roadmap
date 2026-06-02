@@ -1,0 +1,32 @@
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporários e logs
+*.tmp
+*.log
+*.swp
+*~
+
+# Saídas típicas de recon (NÃO versione resultados de alvos)
+recon/
+shots/
+output/
+out/
+results/
+loot/
+*.gowitness
+nuclei_*.txt
+*_subs.txt
+*_urls.txt
+
+# Segredos e configs locais (nunca commitar API keys)
+.env
+*.key
+provider-config.yaml
+config.local.*
+
+# Editores / IDE
+.idea/
+.vscode/
