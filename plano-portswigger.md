@@ -64,4 +64,60 @@ Fecha todo o seu ganha-pão **primeiro**. No fim deste bloco você já caça o q
 
 ---
 
+## 📊 Tracker — data / feito
+
+> **Progresso:** `0 / 272` labs · `0 / 31` topics · BSCP: 🔲
+> Atualize a linha ao mexer em cada topic. **Status:** 🔲 a fazer · 🔄 fazendo · ✅ feito · **Labs:** feitos/total · **Data:** quando fechou · **WU:** link do writeup.
+
+### 🅰️ Bloco A — sua praia 💰
+| Topic | Labs | Status | Data fim | WU | Notas |
+|---|---|---|---|---|---|
+| [Essential skills](https://portswigger.net/web-security/essential-skills) | 0/2 | 🔲 | | | |
+| [Access control](https://portswigger.net/web-security/access-control) | 0/13 | 🔲 | | | |
+| [Business logic](https://portswigger.net/web-security/logic-flaws) | 0/11 | 🔲 | | | |
+| [Information disclosure](https://portswigger.net/web-security/information-disclosure) | 0/5 | 🔲 | | | |
+| [Authentication](https://portswigger.net/web-security/authentication) | 0/14 | 🔲 | | | |
+| [OAuth](https://portswigger.net/web-security/oauth) | 0/6 | 🔲 | | | |
+| [JWT](https://portswigger.net/web-security/jwt) | 0/8 | 🔲 | | | |
+| [DOM-based](https://portswigger.net/web-security/dom-based) | 0/7 | 🔲 | | | |
+| [Race conditions](https://portswigger.net/web-security/race-conditions) | 0/6 | 🔲 | | | |
+| [Prototype pollution](https://portswigger.net/web-security/prototype-pollution) | 0/10 | 🔲 | | | |
+
+### 🅱️ Bloco B — API & injeções
+| Topic | Labs | Status | Data fim | WU | Notas |
+|---|---|---|---|---|---|
+| [SSRF](https://portswigger.net/web-security/ssrf) | 0/7 | 🔲 | | | |
+| [API testing](https://portswigger.net/web-security/api-testing) | 0/5 | 🔲 | | | |
+| [GraphQL](https://portswigger.net/web-security/graphql) | 0/5 | 🔲 | | | |
+| [NoSQL injection](https://portswigger.net/web-security/nosql-injection) | 0/4 | 🔲 | | | |
+| [SQL injection](https://portswigger.net/web-security/sql-injection) | 0/18 | 🔲 | | | |
+| [Path traversal](https://portswigger.net/web-security/file-path-traversal) | 0/6 | 🔲 | | | |
+| [File upload](https://portswigger.net/web-security/file-upload) | 0/7 | 🔲 | | | |
+| [OS command injection](https://portswigger.net/web-security/os-command-injection) | 0/5 | 🔲 | | | |
+| [XXE injection](https://portswigger.net/web-security/xxe) | 0/9 | 🔲 | | | |
+
+### 🅲 Bloco C — XSS & client-side
+| Topic | Labs | Status | Data fim | WU | Notas |
+|---|---|---|---|---|---|
+| [Cross-site scripting](https://portswigger.net/web-security/cross-site-scripting) | 0/30 | 🔲 | | | |
+| [CSRF](https://portswigger.net/web-security/csrf) | 0/12 | 🔲 | | | |
+| [CORS](https://portswigger.net/web-security/cors) | 0/3 | 🔲 | | | |
+
+### 🅳 Bloco D — advanced / parser & cache
+| Topic | Labs | Status | Data fim | WU | Notas |
+|---|---|---|---|---|---|
+| [SSTI](https://portswigger.net/web-security/server-side-template-injection) | 0/7 | 🔲 | | | |
+| [Insecure deserialization](https://portswigger.net/web-security/deserialization) | 0/10 | 🔲 | | | |
+| [HTTP Host header](https://portswigger.net/web-security/host-header) | 0/7 | 🔲 | | | |
+| [Web cache deception](https://portswigger.net/web-security/web-cache-deception) | 0/5 | 🔲 | | | |
+| [HTTP request smuggling](https://portswigger.net/web-security/request-smuggling) | 0/22 | 🔲 | | | |
+| [Web cache poisoning](https://portswigger.net/web-security/web-cache-poisoning) | 0/13 | 🔲 | | | |
+| [Clickjacking](https://portswigger.net/web-security/clickjacking) | 0/5 | 🔲 | | | |
+| [WebSockets](https://portswigger.net/web-security/websockets) | 0/3 | 🔲 | | | |
+| [Web LLM attacks](https://portswigger.net/web-security/llm-attacks) | 0/7 | 🔲 | | | |
+
+> Fechou tudo Apprentice+Practitioner? Marca o BSCP no cabeçalho e vai pro [Mystery Lab](https://portswigger.net/web-security/certification). 272 labs somam os 31 topics acima (2+13+11+5+14+6+8+7+6+10 · 7+5+5+4+18+6+7+5+9 · 30+12+3 · 7+10+7+5+22+13+5+3+7).
+
+---
+
 ⬅️ [ROADMAP MINIMALISTA](ROADMAP-MINIMALISTA.md) · [🏠 Início](README.md)
