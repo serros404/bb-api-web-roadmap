@@ -14,7 +14,7 @@
 
 ## ONLY isto — as 4 entradas
 
-**1. 🎓 [PortSwigger Web Security Academy](https://portswigger.net/web-security)** — a espinha. Faça **todos** os labs (Apprentice → Practitioner → Expert). Prioridade absoluta: **[Access control](https://portswigger.net/web-security/access-control) · [Business logic](https://portswigger.net/web-security/logic-flaws) · [Authentication](https://portswigger.net/web-security/authentication) · [DOM XSS](https://portswigger.net/web-security/cross-site-scripting/dom-based)**. De graça, e é o melhor treino que existe. Prova final: **[BSCP](https://portswigger.net/web-security/certification)**.
+**1. 🎓 [PortSwigger Web Security Academy](https://portswigger.net/web-security)** — a espinha. Faça **todos** os labs (Apprentice → Practitioner → Expert). Prioridade absoluta: **[Access control](https://portswigger.net/web-security/access-control) · [Business logic](https://portswigger.net/web-security/logic-flaws) · [Authentication](https://portswigger.net/web-security/authentication) · [DOM XSS](https://portswigger.net/web-security/cross-site-scripting/dom-based)**. De graça, e é o melhor treino que existe. Prova final: **[BSCP](https://portswigger.net/web-security/certification)**. 👉 **trilha semana a semana (31 topics, ordem por ROI): [plano-portswigger.md](plano-portswigger.md)**.
 
 **2. 🚩 CTF (web)** — criatividade, classes raras, velocidade. [picoCTF](https://picoctf.org) + [Hacker101 CTF](https://www.hacker101.com) *(destrava convites na HackerOne)* → [Intigriti challenges](https://www.intigriti.com) + eventos web no [CTFtime](https://ctftime.org) (NahamCon, corCTF...). 1 a cada 1–2 semanas.
 

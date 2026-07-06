@@ -204,7 +204,7 @@ Três scripts de recon/automação seus, públicos, funcionando, com README.
 **Burp Suite — maestria** (o instrumento da profundidade):
 - **Proxy** (interceptar/editar), **Repeater** (manipular requests à mão — onde você vai morar), **Intruder** (fuzzing manual), **Decoder/Comparer**, **Logger**.
 - Extensões essenciais (BApp Store): **Autorize** (testa autorização automaticamente), **Param Miner**, **Turbo Intruder** (race conditions), **JWT Editor**, **InQL** (GraphQL), **Logger++**, **Collaborator** (OOB para SSRF/XXE blind).
-- Curso/certificação: a **[PortSwigger Web Security Academy](https://portswigger.net/web-security)** é a referência — faça **todos** os labs Apprentice + Practitioner. Meta de fim de F2: **[Burp Suite Certified Practitioner (BSCP)](https://portswigger.net/web-security/certification)**.
+- Curso/certificação: a **[PortSwigger Web Security Academy](https://portswigger.net/web-security)** é a referência — faça **todos** os labs Apprentice + Practitioner. Meta de fim de F2: **[Burp Suite Certified Practitioner (BSCP)](https://portswigger.net/web-security/certification)**. Trilha semana a semana (ordem por ROI): [plano-portswigger.md](../plano-portswigger.md).
 
 **As classes de bug web** (estude e pratique cada uma na Academy):
 
