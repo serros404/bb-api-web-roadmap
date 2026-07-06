@@ -9,6 +9,8 @@
 
 > **Para quem é:** caçador intermediário que quer se especializar em **web + API** de forma **moderna, contextual e em escala**. Não é trilho — é mapa. Adapte prazos à sua vida; **não negocie os princípios**.
 
+> ⚡ **Quer o caminho enxuto?** Se este mapa completo parece demais pra começar, vá direto pro **[ROADMAP MINIMALISTA](ROADMAP-MINIMALISTA.md)** — *ONLY* PortSwigger + CTF + HTB + writeups, foco no que scanner não pega, Burp na veia. Volte aqui quando quiser profundidade.
+
 Este repositório é um **roadmap completo de Bug Bounty Web + API (edição 2026)** em português: metodologia, motor de recon com IA + automação, trilha de fases F0–F7, playbooks por classe de bug, cenários práticos ponta a ponta, setup do ambiente, cookbook de prompts de IA e técnicas avançadas. A filosofia central: **amplitude por máquina (IA + automação na coleta) → profundidade por humano (validação e exploração manual)**.
 
 ---
