@@ -94,6 +94,31 @@ A regra de ouro continua: **toda exploração e todo report passam por validaç�
 
 ---
 
+## 🔎 Recon minimalista — o essencial (1 alvo ou vários)
+
+O funil enxuto e manual-first: só o necessário pra achar **superfície** (subs vivos + esquecidos, endpoints/APIs no JS, keys) e ir pro Burp. Cookbook completo (JS a fundo, APIs, keys, install) no **[ROADMAP MINIMALISTA](ROADMAP-MINIMALISTA.md#recon-o-mínimo--domínios-subs-js-apis-keys)**; pipeline em escala + IA no [motor de recon](01-recon/recon-engine-ia-e-automacao.md).
+
+```bash
+# 1) subdomínios  (1 domínio; vários com -dL roots.txt)
+subfinder -d alvo.com -all -silent | tee subs.txt
+# 2) vivos + tech/título  (+ só URLs limpas em live_urls.txt)
+httpx -l subs.txt -silent -sc -title -td | tee live.txt
+httpx -l subs.txt -silent > live_urls.txt
+# 3) URLs/endpoints: histórico (gau, passivo) + crawl ao vivo que entra no JS (katana)
+echo alvo.com | gau --subs | anew urls.txt
+katana -list live_urls.txt -jc -d 3 -silent | anew urls.txt
+# 4) JS a fundo → endpoints escondidos + keys vazadas
+grep -iE '\.js($|\?)' urls.txt | sort -u > js.txt
+while read u; do curl -sk "$u"; done < js.txt | jsluice urls    | anew urls.txt
+while read u; do curl -sk "$u"; done < js.txt | jsluice secrets
+# 5) triagem: o que abrir no Burp
+grep -iE '\?|=|api|/v[0-9]|graphql|swagger|admin|upload|export' urls.txt | sort -u
+```
+
+> Vivos/esquecidos + endpoints + keys → **fecha o terminal, vai pro Burp** (2 contas + Autorize, lê o JS, quebra a lógica). Recon te leva à porta; **você arromba à mão**.
+
+---
+
 ## 🏛️ Os 3 pilares operacionais (reformulados para 2026)
 
 Tudo neste roadmap se apoia em três pilares. Eles se sustentam mutuamente — derrubar um derruba a casa.

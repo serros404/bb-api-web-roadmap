@@ -41,20 +41,78 @@
 
 ---
 
-## Recon (o mínimo — só pra achar superfície)
+## Recon (o mínimo — domínios, subs, JS, APIs, keys)
 
-Recon **não é o jogo**; é só o que te leva ao alvo manual. Um objetivo: **subdomínios vivos e esquecidos/distantes** (staging, legado, aquisições — o que ninguém olha).
+Recon **não é o jogo**; é o que te leva ao alvo manual. Objetivo: **subs vivos + esquecidos**, os **endpoints/APIs escondidos no JS**, e **keys vazadas**. O funil, do amplo ao fino:
 
-```bash
-# vivos + tech + título, numa linha:
-subfinder -d alvo.com -all -silent | httpx -silent -sc -title -td | tee live.txt
-
-# olhe os "distantes": dev. / staging. / old. / api-v1. / *.empresa-adquirida.com
-# puxe URLs e JS pra ler à mão (endpoints, params, segredos):
-katana -u https://sub.alvo.com -jc -silent | tee urls.txt      # ou: gau alvo.com
+```
+DOMÍNIOS → SUBDOMÍNIOS → VIVOS → URLs/JS → ENDPOINTS/APIs + KEYS → Burp
 ```
 
-Achou os vivos + esquecidos → **fecha o terminal e vai pro Burp.** O resto é manual.
+**1) Domínios (raiz).** Vêm do **escopo** do programa. Pra achar outras raízes da mesma org sem instalar nada (certificados):
+```bash
+curl -s 'https://crt.sh/?q=%25.alvo.com&output=json' | jq -r '.[].name_value' | sort -u
+```
+
+**2) Subdomínios** — 1 domínio **ou** vários (lista com `-dL`):
+```bash
+subfinder -d alvo.com -all -silent | tee subs.txt              # 1 domínio
+subfinder -dL roots.txt -all -silent | anew subs.txt           # vários
+```
+
+**3) Vivos** (quais respondem + tech/título). Guarde também só as **URLs limpas** pra alimentar o resto:
+```bash
+httpx -l subs.txt -silent -sc -title -td -location | tee live.txt
+httpx -l subs.txt -silent > live_urls.txt
+```
+> 👀 Caça os **esquecidos/distantes**: `dev.` `staging.` `old.` `api-v1.` `internal.` `*.empresa-adquirida.com` — é onde a authz é fraca e ninguém olha.
+
+**4) URLs + endpoints** — histórico (`gau`, passivo) **+** crawl ao vivo que entra no JS (`katana`):
+```bash
+# 1 host:
+gau sub.alvo.com | anew urls.txt                               # Wayback/CommonCrawl/URLScan/OTX
+katana -u https://sub.alvo.com -jc -d 3 -silent | anew urls.txt
+# vários (lista):
+echo alvo.com | gau --subs | anew urls.txt
+katana -list live_urls.txt -jc -d 3 -silent | anew urls.txt
+```
+
+**5) JS a fundo → endpoints escondidos + keys.** O JS é onde mora a superfície de API e, às vezes, **segredo vazado**:
+```bash
+grep -iE '\.js($|\?)' urls.txt | sort -u > js.txt
+# baixa os JS e extrai paths/endpoints de dentro deles:
+while read u; do curl -sk "$u"; done < js.txt | jsluice urls | anew urls.txt
+# caça keys/segredos no JS (jsluice tem modo secrets):
+while read u; do curl -sk "$u"; done < js.txt | jsluice secrets
+```
+
+**6) APIs** — ache a superfície no que você já tem:
+```bash
+grep -iE 'api|/v[0-9]|graphql|swagger|openapi|\.json' urls.txt | sort -u
+# docs abertas = mapa do tesouro:  /swagger.json  /openapi.json  /api-docs  /graphql (tente introspection)
+```
+
+**7) Triagem — o que abrir no Burp:**
+```bash
+sort -u urls.txt -o urls.txt
+grep -iE '\?|=' urls.txt                                        # params → IDOR / logic / XSS
+grep -iE 'admin|internal|export|upload|account|invoice|user|order|api|graphql' urls.txt
+```
+
+Pegou os suculentos → **fecha o terminal, abre o Burp.** 2 contas + Autorize (IDOR/BOLA), lê o JS (DOM XSS), quebra a lógica. **Recon te leva à porta; você arromba à mão.**
+
+<details><summary>🔧 <strong>Instala tudo (uma vez)</strong></summary>
+
+```bash
+go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+go install github.com/projectdiscovery/katana/cmd/katana@latest
+go install github.com/lc/gau/v2/cmd/gau@latest
+go install github.com/tomnomnom/anew@latest
+go install github.com/BishopFox/jsluice/cmd/jsluice@latest
+# keys em repositórios: trufflehog / gitleaks (via brew/apt)  ·  jq: brew/apt install jq
+```
+</details>
 
 ---
 
