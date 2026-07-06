@@ -10,6 +10,7 @@
 - [E — Ataques de cache (poisoning & deception)](#e--ataques-de-cache-web-cache-poisoning--deception)
 - [F — Autenticação e SSO avançados](#f--autenticação-e-sso-avançados)
 - [G — Bugs de segunda ordem e contexto secundário](#g--bugs-de-segunda-ordem-e-contexto-secundário)
+- [H — Diferenciais de parser e confusão de componentes (a veia Orange Tsai)](#h--diferenciais-de-parser-e-confusão-de-componentes-a-veia-orange-tsai)
 - [🧠 Síntese: a curva do caçador avançado](#-síntese-a-curva-do-caçador-avançado)
 
 ---
@@ -235,6 +236,39 @@ Onde o input causa efeito **mais tarde** ou **em outro componente** — difícei
 
 ---
 
+## H — Diferenciais de parser e confusão de componentes (a veia Orange Tsai)
+
+A técnica de maior alavancagem do [Orange Tsai](orange-tsai-decodificado-js.md): não achar "um payload que passa", e sim achar **onde dois componentes discordam sobre o significado da mesma entrada**. Todo o cânone dele é isto — parser vs requester (SSRF 2017), proxy vs backend (path normalization 2018), módulo vs módulo (Confusion Attacks no Apache, 2024), camada Unicode vs ANSI (WorstFit). No stack JS, esses diferenciais são abundantes e mal-vigiados.
+
+### O mapa de discordâncias no stack JS
+
+| Onde | Componente A | Componente B | O que explora |
+|---|---|---|---|
+| **URL** | `new URL()` (WHATWG) / allowlist por string | `fetch`/`undici`/`axios` + redirect | [SSRF](#c--ssrf-avançado) (parser/requester, TOCTOU) |
+| **Query** | `querystring` nativo / WAF | `qs` (Express: arrays/objetos aninhados) | HPP, **prototype pollution** via query, type juggling |
+| **Path** | proxy/CDN (nginx) normaliza | Node (`path.normalize`, `express.static`) | path traversal, auth bypass por rota |
+| **Rota/auth** | middleware (Next.js, guard) | handler / static | **bypass de auth** (ex.: `x-middleware-subrequest`, CVE-2025-29927) |
+| **HTTP msg** | front (CDN/HAProxy) | `llhttp` (Node) | [request smuggling](#a7-http-request-smuggling) / desync |
+| **Tipo** | código espera string | recebe array/objeto (`?x[]=`) | NoSQL injection, bypass de comparação |
+| **Header de confiança** | app confia em `X-Forwarded-*`/`Host` | cache/gerador de link | cache poisoning, [host header 2ª ordem](#g--bugs-de-segunda-ordem-e-contexto-secundário) |
+
+### Método para caçar diferenciais
+
+1. **Enumere os parsers.** Para cada entrada (URL, path, query, header, body), pergunte: *"quem lê isto antes de mim?"* (WAF? proxy? middleware? framework? lib?).
+2. **Force a discordância.** Mande a mesma entrada de formas que os dois lados interpretam diferente: encoding divergente (`%2e`, `%252e`, `..%2f`, unicode), chave duplicada, tipo trocado (`x[]=`), caractere ambíguo (`@`, `\`, `;`, `#`, tab).
+3. **Observe onde os dois usos do mesmo campo se contradizem.** O bug mora na contradição — ex.: `req.query.token` lido como array num ponto e como string noutro; `req.path` checado na auth e re-derivado no handler.
+4. **Escale via cadeia.** O diferencial raramente é o impacto final; é o **elo** ([seção A](#a--cadeias-de-exploração-chaining-pensar-em-sistemas-não-em-bugs)). Diferencial de rota → acesso a endpoint sem authz → BOLA; diferencial de URL → SSRF → IMDS.
+
+### Cadeias JS-nativas (o padrão ProxyLogon aplicado ao MERN/Next)
+
+- **Middleware bypass → BOLA:** `x-middleware-subrequest` (ou rota mal-coberta) pula a auth → API de admin sem authz redundante.
+- **Prototype pollution → gadget → RCE:** PP no body → opção default que chega a `child_process`/template → RCE ([2.6](orange-tsai-decodificado-js.md#26-desserialização-e-execução--node-serialize-vm2-prototype-pollution)).
+- **CSPT → CSRF → ação privilegiada:** `../` no fetch do front → endpoint sem CSRF → estado mudado como a vítima.
+
+> Aprofundamento e fontes primárias de cada peça: [Orange Tsai Decodificado — o cânone traduzido para JS](orange-tsai-decodificado-js.md).
+
+---
+
 ## 🧠 Síntese: a curva do caçador avançado
 
 | Nível | O que domina |
@@ -247,8 +281,8 @@ Onde o input causa efeito **mais tarde** ou **em outro componente** — difícei
 
 ---
 
-> **Fim do conjunto completo.** Você percorreu: metodologia ([README](../README.md)), motor de recon com IA ([01](../01-recon/recon-engine-ia-e-automacao.md)), fases F0–F7 ([02](../02-trilha/01-fundacao-e-web-f0-f2.md)–[04](../02-trilha/03-ctf-cve-carreira-f4-f7.md)), referência ([05](../05-referencia/arsenal-labs-checklists-etica.md)), playbook por classe ([06](classes-de-bug.md)), recon avançado/contínuo + API ([07](../01-recon/recon-continuo-e-api-avancado.md)), apêndices operacionais ([08](../05-referencia/apendices.md)), cenários ponta a ponta ([09](../04-pratica/cenarios-praticos.md)), setup + cookbook de IA ([10](../05-referencia/setup-completo-e-cookbook-ia.md)) e técnicas avançadas + cadeias (este). É um mapa de anos de prática. O único passo que falta é o seu: sobe um lab, roda teu primeiro funil num alvo autorizado, lê um writeup — hoje. Boa caçada. 🎯
+> **Quase no fim do núcleo web/API.** Você percorreu: metodologia ([README](../README.md)), motor de recon com IA ([01](../01-recon/recon-engine-ia-e-automacao.md)), fases F0–F7 ([02](../02-trilha/01-fundacao-e-web-f0-f2.md)–[04](../02-trilha/03-ctf-cve-carreira-f4-f7.md)), referência ([05](../05-referencia/arsenal-labs-checklists-etica.md)), playbook por classe ([06](classes-de-bug.md)), recon avançado/contínuo + API ([07](../01-recon/recon-continuo-e-api-avancado.md)), apêndices operacionais ([08](../05-referencia/apendices.md)), cenários ponta a ponta ([09](../04-pratica/cenarios-praticos.md)), setup + cookbook de IA ([10](../05-referencia/setup-completo-e-cookbook-ia.md)) e técnicas avançadas + cadeias (este, [11](tecnicas-avancadas-e-cadeias.md)). **Falta o capstone:** [Orange Tsai Decodificado (foco JS) — 12](orange-tsai-decodificado-js.md), a lente que reorganiza tudo isto em termos de arquitetura, diferenciais de parser e cadeias no ecossistema JavaScript. É um mapa de anos de prática. O único passo que falta é o seu: sobe um lab, roda teu primeiro funil num alvo autorizado, lê um writeup — hoje. Boa caçada. 🎯
 
 ---
 
-⬅️ [Anterior: Setup Completo + Cookbook de IA](../05-referencia/setup-completo-e-cookbook-ia.md) · [⬆️ Topo](#) · 🏁 Fim do roadmap — [voltar ao Início](../README.md)
+⬅️ [Anterior: Setup Completo + Cookbook de IA](../05-referencia/setup-completo-e-cookbook-ia.md) · [⬆️ Topo](#) · [Próximo: Orange Tsai Decodificado (foco JS) ➡️](orange-tsai-decodificado-js.md)

@@ -108,7 +108,13 @@ Tenha simultaneamente no ar: **(1)** lab local rodando, **(2)** um recon automat
 **JavaScript (ler E escrever):**
 - *Ler:* entender JS de aplicações reais, inclusive minificado, é o que destrava DOM XSS e descoberta de endpoints.
 - *Escrever:* DOM, eventos, `fetch`/XHR, `postMessage`, promises, `async/await`.
+- *Modelo de protótipos:* entenda `__proto__`, `constructor.prototype` e herança — é a base de **prototype pollution**, a classe-assinatura do ecossistema (ver [F2](#-f2--web-bb-modern--o-coração) e a [lente Orange Tsai](../03-playbooks/orange-tsai-decodificado-js.md)).
 - Referência: [JavaScript.info](https://javascript.info), [Eloquent JavaScript](https://eloquentjavascript.net/), [MDN JS](https://developer.mozilla.org/en-US/docs/Web/JavaScript).
+
+**Node.js & runtime (a base do pivô 2026):**
+- Como um servidor Node processa uma request: **event loop**, **streams**, `Buffer`, `child_process`, sistema de módulos (`require`/ESM) e `node_modules` (o source das libs — dá para lê-lo).
+- Como os frameworks **roteiam e parseiam**: Express (`qs` na query, `body-parser`, ordem de middleware), Fastify, **Next.js** (middleware vs handler), e o parser HTTP `llhttp`. Saber *onde* cada entrada é interpretada é o que habilita achar [diferenciais de parser](../03-playbooks/tecnicas-avancadas-e-cadeias.md#h--diferenciais-de-parser-e-confusão-de-componentes-a-veia-orange-tsai).
+- Referência: [Node.js docs](https://nodejs.org/en/learn), [Hussein Nasser (YouTube)](https://www.youtube.com/c/HusseinNasser-software-engineering).
 
 **Python (sua linguagem de automação):**
 - Scripts de recon/automação, `requests`, parsing (JSON/HTML), threading básico.

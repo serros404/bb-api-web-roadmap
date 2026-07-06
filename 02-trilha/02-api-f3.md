@@ -26,7 +26,7 @@
 
 **Fundamentos:**
 - REST: recursos, métodos (GET/POST/PUT/PATCH/DELETE), status, versionamento (`/v1`, `/v2`), content negotiation.
-- Autenticação/autorização em API: API keys, OAuth 2.0, JWT (e seus abusos), sessões.
+- Autenticação/autorização em API: API keys, OAuth 2.0, JWT (e seus abusos), sessões. Em stacks JS, atenção ao `jsonwebtoken`/`jose`: `alg:none`, **algorithm confusion** RS256→HS256, `verify` sem `algorithms` fixado, segredo fraco — ver [C6](../03-playbooks/classes-de-bug.md#c6-jwt-attacks).
 - Documentação: OpenAPI/Swagger, Postman collections — quando expostas, são um mapa do tesouro.
 - Referência: [OWASP API Security](https://owasp.org/API-Security/), [Hacking APIs (Corey Ball)](https://nostarch.com/hacking-apis), [APIsec University](https://academy.apisec.ai/api-pentesting-fundamentals).
 
@@ -110,6 +110,19 @@ GraphQL muda as regras: um único endpoint, queries flexíveis, e vetores própr
 # Fingerprint do engine GraphQL + auditoria de misconfig
 python3 graphw00f.py -d -f -t https://api.exemplo.com/graphql
 graphql-cop -t https://api.exemplo.com/graphql
+```
+
+**Vetores a dominar (além da introspection):**
+- **Aliasing → brute/rate-limit bypass:** empacote N tentativas numa request única via aliases (ex.: testar N códigos OTP/senha de uma vez). O rate-limit por-request não vê.
+- **Batching:** arrays de operações numa chamada — mesma lógica de brute, e vetor de abuso de fluxo (API6).
+- **Complexidade/profundidade → DoS (API4):** queries profundamente aninhadas ou circulares (via relações do schema) explodem o custo. Reporte com **impacto mínimo** — não derrube o alvo; demonstre o custo com uma query controlada.
+- **CSRF-over-GraphQL:** se o endpoint aceita `GET` com `query=` ou `Content-Type: application/x-www-form-urlencoded`, mutations podem ser disparadas cross-site sem token.
+- **Autorização em resolvers (o dinheiro):** os mesmos **BOLA/BFLA** ([C1](../03-playbooks/classes-de-bug.md#c1-idor--bola-broken-object-level-authorization)/[C2](../03-playbooks/classes-de-bug.md#c2-bac--bfla-broken-functionaccess-control)) — troque IDs em `node(id:)`/queries; chame mutations privilegiadas com papel comum. Introspection off **não** é proteção (campos ainda existem; force-os).
+- **Injection via resolver:** argumentos que fluem para SQL/NoSQL/comando no backend — o GraphQL só é a porta.
+
+```graphql
+# Aliasing: N tentativas numa request (bypass de rate-limit por-request)
+mutation { a: login(user:"v", pass:"1"){token} b: login(user:"v", pass:"2"){token} }
 ```
 
 > 💡 **IA + GraphQL:** cole o resultado da introspection e peça para a IA listar as mutations mais sensíveis (criação de usuário, mudança de papel, transferência) e sugerir testes de BOLA/BFLA para cada uma.

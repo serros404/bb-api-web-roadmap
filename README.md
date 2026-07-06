@@ -41,6 +41,7 @@ Este roadmap foi repartido em seções temáticas para caber a densidade sem vir
 | [**02 · Trilha**](02-trilha/) | [CTF · CVE · Carreira (F4–F7)](02-trilha/03-ctf-cve-carreira-f4-f7.md) | F4 (CTF) · F5 (CVE hunting) · F6 (carreira/conversão) · F7 (consolidação) | Frentes paralelas e conversão |
 | [**03 · Playbooks**](03-playbooks/) | [Playbook de Classes de Bug](03-playbooks/classes-de-bug.md) | 🔬 Aprofundamento de **cada classe de bug** (server-side, client-side, autz/lógica) com metodologia e exemplos | Quando atacar um endpoint |
 | [**03 · Playbooks**](03-playbooks/) | [Técnicas Avançadas e Cadeias](03-playbooks/tecnicas-avancadas-e-cadeias.md) | 🧠 **Encadeamento** de bugs, **bypass de WAF**, SSRF/XSS/auth/cache avançados, 2ª ordem | Nível expert |
+| [**03 · Playbooks**](03-playbooks/) | [Orange Tsai Decodificado (foco JS)](03-playbooks/orange-tsai-decodificado-js.md) | 🧭 A **metodologia do Orange Tsai** traduzida para o **ecossistema JavaScript** (Node, parsers, proxies, prototype pollution) + panteão de pesquisadores | A lente de research; leia após as classes |
 | [**04 · Prática**](04-pratica/) | [Cenários Práticos](04-pratica/cenarios-praticos.md) | 🎯 **Metodologia aplicada ponta a ponta** em 6 cenários reais de alvo | Para ver tudo junto na prática |
 | [**05 · Referência**](05-referencia/) | [Arsenal · Labs · Checklists · Ética](05-referencia/arsenal-labs-checklists-etica.md) | Arsenal completo, reading list, labs, checklist final, ética e anti-padrões | Referência e auditoria |
 | [**05 · Referência**](05-referencia/) | [Setup Completo + Cookbook de IA](05-referencia/setup-completo-e-cookbook-ia.md) | ⚙️ Instalação/config de **todo o arsenal** + **cookbook de prompts de IA** + cheat-sheet por classe | Montar o ambiente e usar IA |
@@ -123,6 +124,10 @@ Você não avança em série — toca quatro frentes ao mesmo tempo, em proporç
 
 **Por que paralelas:** travou na caça? Vai pro CTF. CTF cansou? Escreve um writeup. Sem ideia? Faz code review de um OSS. As frentes se alimentam — uma técnica de CTF vira bug real; um bug real vira conteúdo; conteúdo abre programa privado.
 
+> **Bug bounty é o centro (a renda); CTF + labs são o acelerador.** Não são trilhas separadas nem "iguais": o **bounty é o objetivo** — alvo real, impacto, dinheiro. **CTF e labs tipo [Hack The Box](https://www.hackthebox.com)** existem para te deixar **mais rápido**, treinar **misturar/encadear vulnerabilidades** e **escalar** num ambiente controlado — e então você leva essa velocidade e esse repertório de cadeias para o alvo real. O **loop**: acelera no CTF/HTB → aplica no bounty (renda) → vira writeup/pesquisa → volta mais afiado. Operacionalizado na [F4 — CTF + Labs a serviço do Bug Bounty](02-trilha/03-ctf-cve-carreira-f4-f7.md#-f4--ctf--labs-a-serviço-do-bug-bounty-velocidade-cadeias-e-escalonamento), com o mapa **categoria de CTF ↔ classe de bug ↔ superfície real**.
+
+> **A bússola de research: Orange Tsai.** O norte metodológico deste roadmap é pensar como o [Orange Tsai](03-playbooks/orange-tsai-decodificado-js.md) — **arquitetura, diferenciais entre parsers/componentes e cadeias de exploração**, não payloads isolados — com todo o foco técnico **pivotado para o ecossistema JavaScript** (Node.js, front-end moderno, npm). Comece pelas classes de bug; volte a essa lente quando quiser subir de "acha bug" para "descobre superfície".
+
 ---
 
 ## 🗺️ Visão geral das fases (F0 → F7)
@@ -169,6 +174,7 @@ A ordem de leitura sugerida preserva a progressão pedagógica original, mesmo c
 10. [04 · Cenários Práticos](04-pratica/cenarios-praticos.md) — tudo junto, ponta a ponta.
 11. [05 · Setup Completo + Cookbook de IA](05-referencia/setup-completo-e-cookbook-ia.md) — montar o ambiente e usar IA.
 12. [03 · Técnicas Avançadas e Cadeias](03-playbooks/tecnicas-avancadas-e-cadeias.md) — nível expert.
+13. [03 · Orange Tsai Decodificado (foco JS)](03-playbooks/orange-tsai-decodificado-js.md) — a **lente de research** que reorganiza tudo: arquitetura, diferenciais de parser e cadeias, pivotados para o ecossistema JavaScript.
 
 > **A diferença entre quem lê isto e quem vira caçador de verdade é uma só: fazer.** Suba um lab, rode seu primeiro funil de recon em um alvo autorizado e leia um writeup hoje. Boa caçada. 🎯
 

@@ -108,13 +108,23 @@ Sequência sagrada: **lab → writeup → caça autorizada**.
 ## 📚 Reading list
 
 ### Blogs / research (assine o RSS)
-[PortSwigger Research](https://portswigger.net/research) · [Assetnote](https://blog.assetnote.io) · [Doyensec](https://blog.doyensec.com) · [intigriti](https://blog.intigriti.com) · [Bugcrowd](https://blog.bugcrowd.com) · [watchTowr](https://watchtowr.com/blog/) · [SonarSource](https://www.sonarsource.com/blog/) · [Snyk](https://snyk.io/blog/) · [Sam Curry](https://samcurry.net) · [Krzysztof Kotowicz](https://blog.kotowicz.net) · [Securitum research](https://research.securitum.com/postmessage-xss/)
+[PortSwigger Research](https://portswigger.net/research) · [Orange Tsai (blog.orange.tw)](https://blog.orange.tw) · [DEVCORE](https://devco.re/blog/) · [Assetnote](https://blog.assetnote.io) · [Doyensec](https://blog.doyensec.com) · [intigriti](https://blog.intigriti.com) · [Bugcrowd](https://blog.bugcrowd.com) · [watchTowr](https://watchtowr.com/blog/) · [SonarSource](https://www.sonarsource.com/blog/) · [Snyk](https://snyk.io/blog/) · [Sam Curry](https://samcurry.net) · [Krzysztof Kotowicz](https://blog.kotowicz.net) · [Securitum research](https://research.securitum.com/postmessage-xss/)
+
+> 🧭 **Panteão completo de pesquisadores** (nome · foco · onde seguir), curado e verificável, na [lente Orange Tsai — seção 4](../03-playbooks/orange-tsai-decodificado-js.md#4--panteão-de-pesquisadores-de-web-security-seguir-ler-imitar). Meta-fonte anual: **"Top 10 Web Hacking Techniques"** da PortSwigger.
 
 ### Curadorias / feeds
 [Pentester.land](https://pentester.land/list-of-bug-bounty-writeups.html) · [InfoSec Writeups](https://infosecwriteups.com) · [HackerOne Hacktivity](https://hackerone.com/hacktivity) · [tl;dr sec](https://tldrsec.com)
 
 ### Referência técnica
 [OWASP API Security](https://owasp.org/API-Security/) · [OWASP WSTG](https://owasp.org/www-project-web-security-testing-guide/) · [HackTricks](https://book.hacktricks.xyz) · [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings) · [MDN HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP)
+
+### JS / Node — pesquisa ofensiva (o pivô 2026)
+A base da [lente Orange Tsai/JS](../03-playbooks/orange-tsai-decodificado-js.md). Fontes primárias:
+- **Prototype pollution:** [origem (Arteau, NorthSec 2018)](https://github.com/HoLyVieR/prototype-pollution-nsec18) · [SSPP→RCE — Silent Spring (USENIX 2023)](https://arxiv.org/abs/2207.11171) · [gadgets (KTH-LangSec)](https://github.com/KTH-LangSec/server-side-prototype-pollution) · [SSPP black-box (PortSwigger)](https://portswigger.net/web-security/prototype-pollution/server-side).
+- **Confusão de parser/rota:** [Next.js middleware bypass CVE-2025-29927 (Vercel postmortem)](https://vercel.com/blog/postmortem-on-next-js-middleware-bypass) · [Confusion Attacks / Apache (Orange)](https://blog.orange.tw/posts/2024-08-confusion-attacks-en/).
+- **Sanitizer/mXSS:** [Bypassing DOMPurify again (PortSwigger)](https://portswigger.net/research/bypassing-dompurify-again-with-mutation-xss).
+- **Sandbox/deser:** [vm2 sandbox escape (advisory)](https://github.com/advisories/GHSA-cchq-frgv-rjh5) · node-serialize CVE-2017-5941.
+- **Supply chain:** [Snyk](https://snyk.io/blog/) · [Socket.dev](https://socket.dev) · [OWASP npm security](https://cheatsheetseries.owasp.org/cheatsheets/NPM_Security_Cheat_Sheet.html).
 
 ### Livros
 - *The Web Application Hacker's Handbook* (Stuttard & Pinto) — base clássica.
