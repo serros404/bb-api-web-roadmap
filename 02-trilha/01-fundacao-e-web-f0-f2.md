@@ -214,6 +214,8 @@ Três scripts de recon/automação seus, públicos, funcionando, com README.
 - Referência: [DOM XSS Wiki](https://github.com/wisec/domxsswiki/wiki), [PortSwigger XSS](https://portswigger.net/web-security/cross-site-scripting).
 
 **2. ★★ Logic flaws + IDOR/BOLA + BAC/BFLA + race conditions — onde está o dinheiro**
+
+> 🎯 **Se este é o seu nicho** (caça manual), o playbook dedicado [Caçador Manual — Autorização e Lógica](../03-playbooks/manual-autorizacao-e-logica.md) leva esta seção ao nível de metodologia: modelagem do sistema, matriz de teste, padrões avançados de IDOR/BFLA, taxonomia de logic flaws, multi-tenancy e encadeamento.
 - **IDOR / BOLA:** trocar IDs para acessar dados de outros. Confirme com **Autorize** (duas sessões). É o bug mais comum e mais pago.
 - **BAC/BFLA:** quebra de controle de acesso por função (chamar endpoint de admin como user).
 - **Logic flaws:** abusar das regras de negócio (preço negativo, pular etapa de pagamento, cupom infinito). Pergunte sempre: *"o que essa função deveria impedir, e como eu quebro essa regra?"*

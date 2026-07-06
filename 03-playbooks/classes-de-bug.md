@@ -421,6 +421,8 @@ Access-Control-Allow-Credentials: true
 
 ## PARTE C — Autorização, autenticação e lógica (onde está o dinheiro)
 
+> 🎯 **Caçador manual?** Esta parte cobre *cada classe*; para operar como **especialista em autorização/lógica** (modelagem do sistema, matriz de teste, padrões avançados de IDOR/BFLA, taxonomia de logic flaws, encadeamento), veja o playbook dedicado [Caçador Manual — Autorização e Lógica](manual-autorizacao-e-logica.md).
+
 ---
 
 ### C1. IDOR / BOLA (Broken Object Level Authorization)

@@ -341,4 +341,4 @@ Próximo passo prático: leve esta lente para o [playbook de classes de bug](cla
 
 ---
 
-⬅️ [Anterior: Técnicas Avançadas e Cadeias](tecnicas-avancadas-e-cadeias.md) · [⬆️ Topo](#) · 🏁 Fim do núcleo web/API — [voltar ao Início](../README.md)
+⬅️ [Anterior: Técnicas Avançadas e Cadeias](tecnicas-avancadas-e-cadeias.md) · [⬆️ Topo](#) · [Próximo: Caçador Manual — Autorização e Lógica ➡️](manual-autorizacao-e-logica.md)

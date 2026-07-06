@@ -42,6 +42,7 @@ Este roadmap foi repartido em seções temáticas para caber a densidade sem vir
 | [**03 · Playbooks**](03-playbooks/) | [Playbook de Classes de Bug](03-playbooks/classes-de-bug.md) | 🔬 Aprofundamento de **cada classe de bug** (server-side, client-side, autz/lógica) com metodologia e exemplos | Quando atacar um endpoint |
 | [**03 · Playbooks**](03-playbooks/) | [Técnicas Avançadas e Cadeias](03-playbooks/tecnicas-avancadas-e-cadeias.md) | 🧠 **Encadeamento** de bugs, **bypass de WAF**, SSRF/XSS/auth/cache avançados, 2ª ordem | Nível expert |
 | [**03 · Playbooks**](03-playbooks/) | [Orange Tsai Decodificado (foco JS)](03-playbooks/orange-tsai-decodificado-js.md) | 🧭 A **metodologia do Orange Tsai** traduzida para o **ecossistema JavaScript** (Node, parsers, proxies, prototype pollution) + panteão de pesquisadores | A lente de research; leia após as classes |
+| [**03 · Playbooks**](03-playbooks/) | [Caçador Manual: Autorização e Lógica](03-playbooks/manual-autorizacao-e-logica.md) | 🎯 A trilha de quem vive de **logic flaws, BAC/BFLA e BOLA/IDOR** (scanner-blind): modelagem, matriz de teste, padrões avançados, multi-tenancy, encadeamento | Para o caçador **manual**; onde está o dinheiro |
 | [**04 · Prática**](04-pratica/) | [Cenários Práticos](04-pratica/cenarios-praticos.md) | 🎯 **Metodologia aplicada ponta a ponta** em 6 cenários reais de alvo | Para ver tudo junto na prática |
 | [**05 · Referência**](05-referencia/) | [Arsenal · Labs · Checklists · Ética](05-referencia/arsenal-labs-checklists-etica.md) | Arsenal completo, reading list, labs, checklist final, ética e anti-padrões | Referência e auditoria |
 | [**05 · Referência**](05-referencia/) | [Setup Completo + Cookbook de IA](05-referencia/setup-completo-e-cookbook-ia.md) | ⚙️ Instalação/config de **todo o arsenal** + **cookbook de prompts de IA** + cheat-sheet por classe | Montar o ambiente e usar IA |
@@ -77,7 +78,7 @@ flowchart TD
 
 - **Cobertura.** Um programa grande tem milhares de subdomínios e dezenas de milhares de endpoints. Olho humano não enumera isso; automação enumera em minutos.
 - **Foco.** Depois de mapear tudo, IA + filtros te dizem onde estão os alvos suculentos (apps de admin, APIs antigas, endpoints com parâmetros sensíveis), e você gasta sua energia humana só onde vale.
-- **Onde está o dinheiro.** Os bugs que pagam — *logic flaws*, IDOR/BOLA, race conditions, cadeias — são **invisíveis para scanner**. Eles exigem contexto, e contexto é humano. Por isso a profundidade nunca terceiriza para a máquina.
+- **Onde está o dinheiro.** Os bugs que pagam — *logic flaws*, IDOR/BOLA, race conditions, cadeias — são **invisíveis para scanner**. Eles exigem contexto, e contexto é humano. Por isso a profundidade nunca terceiriza para a máquina. Se essa é **a sua praia** (caça manual), o roadmap tem uma trilha dedicada: [Caçador Manual — Autorização e Lógica](03-playbooks/manual-autorizacao-e-logica.md).
 
 ### O que **continua** sendo anti-padrão (importante)
 
@@ -117,8 +118,8 @@ Você não avança em série — toca quatro frentes ao mesmo tempo, em proporç
 
 | Frente | O que é | Por que importa |
 |---|---|---|
-| **1. BB principal (web + API)** | Sua caça central em programas reais, com o pipeline híbrido | É o objetivo. Gera bugs, dinheiro e reputação. |
-| **2. CTF (web/API)** | Desafios competitivos de web e API | Treina criatividade e classes que raramente aparecem "de graça" na caça. |
+| **1. BB principal (web + API)** — ⭐ o centro | Sua caça central em programas reais, com o pipeline híbrido | **É o objetivo e a renda.** As outras três frentes servem a esta. |
+| **2. CTF + labs (HTB)** — o acelerador | Desafios e labs (HTB/PortSwigger) — **desde a semana 1** | Deixa você **rápido**, treina **misturar/encadear** vulns e **escalar** — e você leva isso pro bounty. |
 | **3. Conteúdo / pipeline pública** | Blog + perfil + GitHub com writeups e ferramentas | Constrói autoridade, atrai convites privados e abre portas de carreira. |
 | **4. CVE lateral (OSS)** | Code review de open source → CVE próprio | Diversifica, gera CVEs no currículo e afia leitura de código (turbinada por IA). |
 
@@ -130,19 +131,54 @@ Você não avança em série — toca quatro frentes ao mesmo tempo, em proporç
 
 ---
 
-## 🗺️ Visão geral das fases (F0 → F7)
+## 🗺️ As fases e como elas rodam (importante: **não é uma fila**)
 
-> Prazos são **indicativos** para ~15–20h/semana. Capacidade demonstrada > tempo decorrido.
+> Prazos são **indicativos** para ~15–20h/semana. **Capacidade demonstrada > tempo decorrido.**
 
+O erro de leitura mais comum é achar que se faz "F0 → F1 → F2 → … → F7" em fila, e que **CTF (F4) só vem lá no fim**. **Não é assim.** O roadmap tem **três camadas que rodam ao mesmo tempo**:
+
+**🦴 1. A espinha — habilidade progressiva (com sobreposição).** `F0 Setup → F1 Fundação → F2 Web → F3 API`. Aqui há ordem real (fundação antes de web; web antes de aprofundar API), mas **F2 e F3 se sobrepõem** e você avança por **capacidade, não por tempo**.
+
+**🔁 2. As frentes contínuas — em paralelo, desde o começo** (não são "fases depois do F3"):
+- 🎯 **Bug bounty** — o **centro (a renda)**. Ramp-up na F2, e nunca para.
+- 🚩 **CTF + labs (HTB / PortSwigger)** — o **acelerador** (velocidade, encadeamento, escalonamento). **Começa na semana 1** — picoCTF e PortSwigger Academy no dia 1. *(É o "F4" — mas não é o 5º passo.)*
+- 🧬 **CVE hunting** (code review de OSS) — a partir da F2, contínuo. *(É o "F5".)*
+- ✍️ **Conteúdo / pipeline pública** (blog + GitHub) — desde a **F0**.
+
+**🎓 3. Conversão & sustentação — resultado contínuo, não "fase final".** 💼 Carreira (F6) e 🏔️ Consolidação/anti-burnout (F7) acontecem **à medida que você produz**, não no fim.
+
+> **Na prática, já na sua PRIMEIRA semana** você monta o ambiente (F0), faz picoCTF + PortSwigger (a frente CTF, "F4") **e** cria o blog (conteúdo). O "F4" **anda com você o tempo todo**. **Os números F são IDs de referência — não uma ordem obrigatória de fila.** O sequenciamento real e concreto está no [plano dos primeiros 90 dias](05-referencia/apendices.md#-b--plano-concreto-dos-primeiros-90-dias) e no [cronograma semanal](05-referencia/apendices.md#-c--template-de-cronograma-semanal).
+
+### Quando cada camada roda (ilustrativo — não são prazos rígidos)
+
+| Frente | Semana 1 | Mês 1–2 | Mês 3–6 | Mês 6+ |
+|---|---|---|---|---|
+| 🦴 **Espinha (skill)** | F0 setup | F1 fundação | F2 web → F3 API | domínio web+API |
+| 🎯 **Bug bounty** (renda) | — | primeiros labs de classe | **caça real** (1º bug) | escala + convites privados |
+| 🚩 **CTF + labs (HTB)** | **picoCTF + PortSwigger** | HTB + challenges | contínuo (cadeias) | contínuo |
+| 🧬 **CVE hunting** | — | observar OSS | code review → 1º CVE | contínuo |
+| ✍️ **Conteúdo / blog** | **blog + perfis no ar** | writeups | writeups | autoridade |
+
+### As fases em detalhe (F = ID, não posição numa fila)
+
+**🦴 Espinha — progressiva (F2/F3 se sobrepõem):**
 | Fase | Tema | Duração aprox. | Badge |
 |---|---|---|---|
 | **F0** | Setup + Mindset + Pipeline pública + **base de automação** | 2–3 semanas | 🥚 *Iniciado* |
-| **F1** | Fundação técnica (HTTP, JS, Python, SQL, arquitetura web) | 4–8 semanas | 🐣 *Fundado* |
+| **F1** | Fundação técnica (HTTP, JS, **Node**, Python, SQL, arquitetura) | 4–8 semanas | 🐣 *Fundado* |
 | **F2** | ⭐ Web BB Modern (recon aplicado + Burp + classes web) | 3–6 meses | 🦅 *Caçador Web* |
 | **F3** | API Bug Bounty (OWASP API Top 10 2023, REST, GraphQL) | 2–4 meses | 🛰️ *Caçador de API* |
-| **F4** | CTF Player (web/API) | contínuo | 🚩 *Competidor* |
-| **F5** | CVE Hunting lateral (code review OSS + IA) | contínuo a partir da F2 | 🧬 *Pesquisador* |
-| **F6** | Carreira + Conversão (4 rotas, BR/USD) | a partir de resultados | 💼 *Profissional* |
+
+**🔁 Frentes contínuas — em paralelo, desde cedo (NÃO "depois" da espinha):**
+| Fase | Tema | Quando começa | Badge |
+|---|---|---|---|
+| **F4** | CTF + labs a serviço do bug bounty (velocidade, cadeias, escalonamento) | **Semana 1** (picoCTF/PortSwigger) → HTB | 🚩 *Competidor* |
+| **F5** | CVE Hunting lateral (code review OSS + IA) | a partir da F2, contínuo | 🧬 *Pesquisador* |
+
+**🎓 Conversão & sustentação — contínuo (não "fase final"):**
+| Fase | Tema | Quando | Badge |
+|---|---|---|---|
+| **F6** | Carreira + Conversão (4 rotas, BR/USD) | quando surgem resultados | 💼 *Profissional* |
 | **F7** | Consolidação (cadência sustentável, anti-burnout) | permanente | 🏔️ *Veterano* |
 
 **Resultados-alvo por fase** (o que comprova que você passou):
@@ -162,6 +198,8 @@ Você não avança em série — toca quatro frentes ao mesmo tempo, em proporç
 
 A ordem de leitura sugerida preserva a progressão pedagógica original, mesmo com os arquivos repartidos em pastas temáticas:
 
+> ⚠️ **Ordem de leitura ≠ ordem de execução.** Esta lista é a sequência **pedagógica** (a ordem para *entender* o material). As **frentes contínuas** (CTF/labs, conteúdo, e depois CVE) você **começa já na semana 1**, em paralelo — ver [como as fases rodam](#-as-fases-e-como-elas-rodam-importante-não-é-uma-fila) e o [plano dos 90 dias](05-referencia/apendices.md#-b--plano-concreto-dos-primeiros-90-dias).
+
 1. **`README.md`** *(este)* — metodologia e mapa.
 2. [01 · Recon Engine: IA + Automação](01-recon/recon-engine-ia-e-automacao.md) — o motor de coleta.
 3. [02 · Fundação + Web (F0·F1·F2)](02-trilha/01-fundacao-e-web-f0-f2.md) — a base e o coração.
@@ -175,6 +213,7 @@ A ordem de leitura sugerida preserva a progressão pedagógica original, mesmo c
 11. [05 · Setup Completo + Cookbook de IA](05-referencia/setup-completo-e-cookbook-ia.md) — montar o ambiente e usar IA.
 12. [03 · Técnicas Avançadas e Cadeias](03-playbooks/tecnicas-avancadas-e-cadeias.md) — nível expert.
 13. [03 · Orange Tsai Decodificado (foco JS)](03-playbooks/orange-tsai-decodificado-js.md) — a **lente de research** que reorganiza tudo: arquitetura, diferenciais de parser e cadeias, pivotados para o ecossistema JavaScript.
+14. [03 · Caçador Manual: Autorização e Lógica](03-playbooks/manual-autorizacao-e-logica.md) — a trilha do caçador **manual** de logic flaws / BAC/BFLA / BOLA/IDOR: metodologia, matriz de teste e encadeamento. **Onde está o dinheiro.**
 
 > **A diferença entre quem lê isto e quem vira caçador de verdade é uma só: fazer.** Suba um lab, rode seu primeiro funil de recon em um alvo autorizado e leia um writeup hoje. Boa caçada. 🎯
 
