@@ -96,7 +96,7 @@ A regra de ouro continua: **toda exploração e todo report passam por validaç�
 
 ## 🔎 Recon minimalista — o essencial (1 alvo ou vários)
 
-O funil enxuto e manual-first: só o necessário pra achar **superfície** (subs vivos + esquecidos, endpoints/APIs no JS, keys) e ir pro Burp. Cookbook completo (JS a fundo, APIs, keys, install) no **[ROADMAP MINIMALISTA](ROADMAP-MINIMALISTA.md#recon-o-mínimo--domínios-subs-js-apis-keys)**; pipeline em escala + IA no [motor de recon](01-recon/recon-engine-ia-e-automacao.md).
+O funil enxuto e manual-first: só o necessário pra achar **superfície** (subs vivos + esquecidos, endpoints/APIs no JS, keys) e ir pro Burp. Cookbook completo (JS a fundo, APIs, keys, install) no **[ROADMAP MINIMALISTA](ROADMAP-MINIMALISTA.md#recon-o-mínimo--domínios-subs-js-apis-keys)**; pipeline em escala + IA no [motor de recon](01-recon/recon-engine-ia-e-automacao.md). Alvo **big tech** (ASN, aquisições, legado/`actuator`, funções pouco usadas): **[recon-big-tech.md](recon-big-tech.md)**. Onde reportar pra **Hall of Fame**: **[programas-hall-da-fama.md](programas-hall-da-fama.md)**.
 
 ```bash
 # 1) subdomínios  (1 domínio; vários com -dL roots.txt)

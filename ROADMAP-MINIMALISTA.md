@@ -101,6 +101,8 @@ grep -iE 'admin|internal|export|upload|account|invoice|user|order|api|graphql' u
 
 Pegou os suculentos → **fecha o terminal, abre o Burp.** 2 contas + Autorize (IDOR/BOLA), lê o JS (DOM XSS), quebra a lógica. **Recon te leva à porta; você arromba à mão.**
 
+> 🏙️ **Alvo é big tech?** Aí o recon vira outro jogo (ASN, aquisições, JS/mobile, legado/`actuator`, **funções pouco usadas**) → **[recon-big-tech.md](recon-big-tech.md)**. E **[onde reportar pra Hall of Fame](programas-hall-da-fama.md)** (NASA, Google, Apple, OpenAI, X...).
+
 <details><summary>🔧 <strong>Instala tudo (uma vez)</strong></summary>
 
 ```bash
